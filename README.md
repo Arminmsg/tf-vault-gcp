@@ -20,21 +20,13 @@ vault write gcp/roleset/my-token-roleset \
 vault write auth/jwt-demo/config \
     oidc_discovery_url="https://token.actions.githubusercontent.com" \
     bound_issuer="https://token.actions.githubusercontent.com" \
-    default_role="github-actions"
+    default_role="foo"
 ```
 
 
-```
-vault write auth/jwt-demo/role/github-actions \
-    role_type="github-actions" \
-    bound_claims_type="glob" \
-    bound_claims="{\"sub\":\"repo:Arminmsg/tf-vault-gcp:ref:refs/*\"}" \
-    bound_audiences="https://github.com/Arminmsg" \
-    user_claim="workflow" \
-    ttl=1h
-```
 
-vault write auth/jwt-demo/role/github-actions -<<EOF
+
+vault write auth/jwt-demo/role/foo -<<EOF
 {
     "role_type": "jwt",
     "bound_claims_type": "glob",
@@ -43,6 +35,7 @@ vault write auth/jwt-demo/role/github-actions -<<EOF
         },
     "bound_audiences": "https://github.com/Arminmsg",
     "user_claim" :"workflow",
-    "ttl": "1h"
+    "ttl": "1h",
+    "policies": ["vault-actions"]
 }
 EOF

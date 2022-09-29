@@ -27,7 +27,7 @@ jobs:
           exportToken: true
           namespace: admin
           method: jwt
-          role: github-actions
+          role: foo
           secrets: |
             cloud-secrets/data/tfc-secret TFC_TOKEN | TFC_TOKEN ;
             cloud-secrets/data/tfc-secret ARM_TENANT_ID | ARM_TENANT_ID ;
