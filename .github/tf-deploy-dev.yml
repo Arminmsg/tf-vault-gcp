@@ -5,6 +5,7 @@ name: TF-Plan
 on:
   push:
     branches:
+      - '*'
 
 jobs:
   DeployDev:
