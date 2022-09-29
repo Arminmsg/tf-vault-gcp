@@ -1,0 +1,39 @@
+---
+
+name: TF-Plan
+
+on:
+  push:
+    branches:
+
+jobs:
+  DeployDev:
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: ubuntu-latest
+    name: Deploy to Dev
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Retrieve Secrets from HashiCorp Vault
+        id: secrets
+        uses: hashicorp/vault-action@v2.4.0
+        with:
+          url: https://hcp-vault-cluster-public-vault-e5830e3d.85b50f4b.z1.hashicorp.cloud:8200
+          exportToken: true
+          namespace: admin
+          method: jwt
+          role: github-actions
+          secrets: |
+            cloud-secrets/data/tfc-secret TFC_TOKEN | TFC_TOKEN ;
+            cloud-secrets/data/tfc-secret ARM_TENANT_ID | ARM_TENANT_ID ;
+            cloud-secrets/data/tfc-secret ARM_SUBSCRIPTION_ID | ARM_SUBSCRIPTION_ID ;
+            azure/creds/dev client_id | ARM_CLIENT_ID ;
+            azure/creds/dev client_secret | ARM_CLIENT_SECRET
+            
+      - name: Sleep for 15 seconds
+        run: sleep 15s
+        shell: bash

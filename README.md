@@ -28,8 +28,21 @@ vault write auth/jwt-demo/config \
 vault write auth/jwt-demo/role/github-actions \
     role_type="github-actions" \
     bound_claims_type="glob" \
-    bound_claims='{"sub":"repo:Arminmsg/tf-vault-gcp:ref:refs/*"}' \
+    bound_claims="{\"sub\":\"repo:Arminmsg/tf-vault-gcp:ref:refs/*\"}" \
     bound_audiences="https://github.com/Arminmsg" \
     user_claim="workflow" \
     ttl=1h
 ```
+
+vault write auth/jwt-demo/role/github-actions -<<EOF
+{
+    "role_type": "jwt",
+    "bound_claims_type": "glob",
+    "bound_claims": {
+        "sub": "repo:Arminmsg/tf-vault-gcp:ref:refs/*"
+        },
+    "bound_audiences": "https://github.com/Arminmsg",
+    "user_claim" :"workflow",
+    "ttl": "1h"
+}
+EOF
